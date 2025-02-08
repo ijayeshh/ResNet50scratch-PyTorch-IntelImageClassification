@@ -1,6 +1,6 @@
 from IntelImageClassification.constants import *
 from IntelImageClassification.utils.common import read_yaml, create_directories
-from IntelImageClassification.entity.config_entity import DataIngestionConfig
+from IntelImageClassification.entity.config_entity import (DataIngestionConfig, PrepareResnetModelConfig)
 
 class ConfigurationManager:
     def __init__(
@@ -28,3 +28,18 @@ class ConfigurationManager:
         )
 
         return data_ingestion_config
+    
+    def get_prepare_resnet_model_config(self) -> PrepareResnetModelConfig:
+        config = self.config.prepare_resnet_model
+        
+        create_directories([config.root_dir])
+
+        prepare_resnet_model_config = PrepareResnetModelConfig(
+            root_dir=Path(config.root_dir),
+            resnet_model_path=Path(config.resnet_model_path),
+            params_image_size=self.params.IMAGE_SIZE,
+            params_learning_rate=self.params.LEARNING_RATE,
+            params_classes=self.params.CLASSES
+        )
+
+        return prepare_resnet_model_config
