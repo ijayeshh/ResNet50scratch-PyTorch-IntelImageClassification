@@ -10,3 +10,7 @@ data_ingestion:
 prepare_resnet_model:
   root_dir: artifacts/prepare_resnet_model
   resnet_model_path: artifacts/prepare_resnet_model/resnet_model.pt
+
+training:
+  root_dir: artifacts/training
+  trained_model_path: artifacts/training/trained_model.pt

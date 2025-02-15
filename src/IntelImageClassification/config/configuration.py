@@ -1,6 +1,7 @@
 from IntelImageClassification.constants import *
 from IntelImageClassification.utils.common import read_yaml, create_directories
-from IntelImageClassification.entity.config_entity import (DataIngestionConfig, PrepareResnetModelConfig)
+from IntelImageClassification.entity.config_entity import (DataIngestionConfig, PrepareResnetModelConfig,TrainingConfig)
+import os
 
 class ConfigurationManager:
     def __init__(
@@ -43,3 +44,29 @@ class ConfigurationManager:
         )
 
         return prepare_resnet_model_config
+
+    def get_training_config(self) -> TrainingConfig:
+        training = self.config.training
+        prepare_resnet_model = self.config.prepare_resnet_model
+        params = self.params
+        training_data = os.path.join(self.config.data_ingestion.unzip_dir, "seg_train","seg_train")
+        print(training_data)
+        test_data=os.path.join(self.config.data_ingestion.unzip_dir, "seg_test","seg_test")
+        print(test_data)
+        create_directories([
+            Path(training.root_dir)
+        ])
+
+        training_config = TrainingConfig(
+            root_dir=Path(training.root_dir),
+            trained_model_path=Path(training.trained_model_path),
+            resnet_model_path=Path(prepare_resnet_model.resnet_model_path),
+            training_data=Path(training_data),
+            test_data=Path(test_data),
+            params_epochs=params.EPOCHS,
+            params_batch_size=params.BATCH_SIZE,
+            params_is_augmentation=params.AUGMENTATION,
+            params_image_size=params.IMAGE_SIZE
+        )
+
+        return training_config
